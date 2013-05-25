@@ -1,0 +1,91 @@
+#!/usr/bin/env node
+var http = require("http");
+var SSEStream = require("../lib/sse_stream");
+var DecorateStream = require("../lib/sse_decorator");
+var path = require("path");
+var fs = require("fs");
+var usage = function() {
+  console.log("node server.js --file '/user/test/xxx.txt'|--cmd 'tail -f xxx.txt' [--port] [3001]");
+};
+
+if (process.argv.length < 4) {
+  usage();
+  process.exit();
+}
+if (process.argv[4] && process.argv[4] !== "--port") {
+  usage();
+  process.exit();
+}
+var port = (process.argv[4] && process.argv[5]) || 3001;
+
+http.createServer(handler).listen(port);
+console.log("Server Started port " + port);
+
+this.opts = function() {
+  this.option = process.argv[2];
+  if (this.option === "--file") {
+    this.filepath = process.argv[3];
+  } else if (this.option === "--cmd") {
+    this.command = process.argv[3];
+  } else {
+    usage();
+    process.exit();
+  }
+  return this;
+};
+
+var self = this;
+
+function handler(req, res) {
+  var opts = self.opts();
+  if (req.headers["accept"] && req.headers["accept"] == "text/event-stream") {
+    console.log(opts);
+    if (opts.filepath) {
+      var filepath = path.resolve(opts.filepath);
+      fs.watch(filepath, function (event, f) {
+        var prevSize = 0;
+        fs.stat(filepath, function(err, stats) {
+          if (err) return;
+          var size = stats.size;
+          if (size > prevSize) {
+            var readStream = fs.createReadStream(filepath, {start: prevSize, end: size});
+            prevSize = size;
+            pipeResponse(readStream, res);
+          }
+        });
+      });
+    } else if (opts.command) {
+      var exec = require('child_process').exec;
+      var child = exec(opts.command);
+      pipeResponse(child.stdout, res);
+      pipeResponse(child.stderr, res);
+    }
+  } else {
+    var htmlPath = path.resolve(__dirname + "/../html/index.html");
+    var read = fs.createReadStream(htmlPath);
+    read.pipe(res);
+  }
+};
+
+var pipeResponse = function(readStream, res) {
+  var sse_stream = new SSEStream();
+  var deco_stream = new DecorateStream();
+  res.writeHead(200, {
+    'Content-type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive'
+  });
+  readStream.pipe(deco_stream).pipe(sse_stream).pipe(res);
+  sse_stream.on("end", function() {
+    res.end();
+  });
+  readStream.on("end", function() {
+    res.removeAllListeners();
+  });
+  sse_stream.on("error", function(error) {
+    console.error("error " + error);
+  });
+  readStream.on("error", function(error) {
+    console.error("error " + error);
+  });
+};

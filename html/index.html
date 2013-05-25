@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Server Sent Events</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script>
+$(function() {
+  var source = new EventSource("/count");
+  source.onmessage =  function(event) {
+    $("p").append(event.data);
+    $('html, body').animate({
+      scrollTop: $(document).height()
+    }, 100);
+  };
+});
+</script>
+</head>
+<body>
+<p></p>
+</body>
+</html>

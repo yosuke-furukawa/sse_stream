@@ -1,0 +1,27 @@
+{
+  "name": "sse_stream",
+  "version": "0.0.1",
+  "description": "Server Sent Events Stream ",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/yosuke-furukawa/stream2_hackathon.git"
+  },
+  "keywords": [
+    "sse",
+    "realtime",
+    "stream"
+  ],
+  "author": "yosuke_furukawa",
+  "license": "MIT",
+  "gitHead": "941ccf6e01f3ac85cabe9a3f49b8757ebc3ed75f",
+  "bugs": {
+    "url": "https://github.com/yosuke-furukawa/stream2_hackathon/issues"
+  }
+}
