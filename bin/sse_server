@@ -38,8 +38,7 @@ var self = this;
 
 function handler(req, res) {
   var opts = self.opts();
-  if (req.headers["accept"] && req.headers["accept"] == "text/event-stream") {
-    console.log(opts);
+  if (req.headers["accept"] === "text/event-stream") {
     if (opts.filepath) {
       var filepath = path.resolve(opts.filepath);
       fs.watch(filepath, function (event, f) {
