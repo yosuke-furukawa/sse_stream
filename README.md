@@ -21,7 +21,24 @@ http.createServer(function(req, res){
     var sse_stream = new SSEStream();
     var exec = require('child_process').exec;
     var child = exec("tail -f test.log");
+    res.writeHead(200, {
+    'Content-type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive'
+    });
     child.stdout.pipe(sse_stream).pipe(res);
+    sse_stream.on("end", function() {
+      res.end();
+    });
+    readStream.on("end", function() {
+      res.removeAllListeners();
+    });
+    sse_stream.on("error", function(error) {
+      console.error("error " + error);
+    });
+    readStream.on("error", function(error) {
+      console.error("error " + error);
+    });
   } else {
     fs.createReadStream("index.html").pipe(res);
   }
