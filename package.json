@@ -1,8 +1,8 @@
 {
   "name": "sse_stream",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Server Sent Events Stream ",
-  "main": "index.js",
+  "main": "./index.js",
   "directories": {
     "test": "test"
   },
@@ -18,6 +18,9 @@
     "realtime",
     "stream"
   ],
+  "bin": {
+    "sse_server": "./bin/sse_server"
+  },
   "author": "yosuke_furukawa",
   "license": "MIT",
   "gitHead": "941ccf6e01f3ac85cabe9a3f49b8757ebc3ed75f",
