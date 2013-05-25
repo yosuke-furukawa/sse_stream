@@ -7,14 +7,14 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/**/*_test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/yosuke-furukawa/stream2_hackathon.git"
+    "url": "git://github.com/yosuke-furukawa/sse_stream.git"
   },
   "keywords": [
-    "sse",
+    "server-sent events",
     "realtime",
     "stream"
   ],
@@ -22,6 +22,6 @@
   "license": "MIT",
   "gitHead": "941ccf6e01f3ac85cabe9a3f49b8757ebc3ed75f",
   "bugs": {
-    "url": "https://github.com/yosuke-furukawa/stream2_hackathon/issues"
+    "url": "https://github.com/yosuke-furukawa/sse_stream/issues"
   }
 }
